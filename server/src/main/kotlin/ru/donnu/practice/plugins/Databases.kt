@@ -3,7 +3,10 @@ package ru.donnu.practice.plugins
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import ru.donnu.practice.model.country.CountryTable
+import ru.donnu.practice.model.region.RegionTable
 import ru.donnu.practice.utills.Env
 
 fun Application.configureDatabases() {
@@ -15,7 +18,7 @@ fun Application.configureDatabases() {
         password = Env["DATABASE_PASSWORD"],
     )
     transaction {
-//        SchemaUtils.create()
+        SchemaUtils.create(RegionTable, CountryTable)
     }
 
 }

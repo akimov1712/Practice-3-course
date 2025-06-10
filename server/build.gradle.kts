@@ -1,7 +1,8 @@
 plugins {
+    application
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
-    application
+    id("kotlinx-serialization")
 }
 
 group = "ru.donnu.practice"
