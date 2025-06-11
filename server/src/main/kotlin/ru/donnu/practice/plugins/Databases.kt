@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import ru.donnu.practice.model.country.CountryTable
+import ru.donnu.practice.model.manufacture.ManufactureTable
 import ru.donnu.practice.model.region.RegionTable
 import ru.donnu.practice.utills.Env
 
@@ -18,7 +19,7 @@ fun Application.configureDatabases() {
         password = Env["DATABASE_PASSWORD"],
     )
     transaction {
-        SchemaUtils.create(RegionTable, CountryTable)
+        SchemaUtils.create(RegionTable, CountryTable, ManufactureTable)
     }
 
 }

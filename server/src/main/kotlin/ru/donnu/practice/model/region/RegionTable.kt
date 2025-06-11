@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object RegionTable: IntIdTable("region") {
 
-    val name = text("name")
+    private val name = text("name")
 
     fun insertName(name: String) = transaction { insert { it[RegionTable.name] = name } }
 
