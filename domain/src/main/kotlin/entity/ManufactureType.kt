@@ -1,4 +1,4 @@
-package ru.donnu.practice.model.manufacture
+package entity
 
 enum class ManufactureType {
 

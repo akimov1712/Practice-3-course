@@ -16,6 +16,8 @@ application {
 
 dependencies {
 
+    implementation(project(":domain"))
+
     val logback_version= "1.5.13"
     val exposed_version="0.53.0"
     val h2_version="2.2.224"

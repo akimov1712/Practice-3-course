@@ -1,10 +1,10 @@
 package ru.donnu.practice.feature.production
 
+import entity.ProductionEntity
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import ru.donnu.practice.model.country.CountryTable
-import ru.donnu.practice.model.manufacture.ManufactureTable
-import ru.donnu.practice.model.production.ProductionEntity
+import ru.donnu.practice.tables.country.CountryTable
+import ru.donnu.practice.tables.manufacture.ManufactureTable
 
 class ProductionController(private val call: RoutingCall) {
 

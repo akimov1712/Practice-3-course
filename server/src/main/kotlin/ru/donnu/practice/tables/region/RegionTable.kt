@@ -1,5 +1,6 @@
-package ru.donnu.practice.model.region
+package ru.donnu.practice.tables.region
 
+import entity.RegionEntity
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
@@ -21,8 +22,8 @@ object RegionTable: IntIdTable("region") {
     }
 
     private fun ResultRow.toRegion() = RegionEntity(
-        id = this[RegionTable.id].value,
-        name = this[RegionTable.name],
+        id = this[id].value,
+        name = this[name],
     )
 
 }

@@ -1,21 +1,28 @@
 package ru.donnu.practice.feature.manufacture
 
+import entity.ManufactureType
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import ru.donnu.practice.model.manufacture.ManufactureTable
-import ru.donnu.practice.model.manufacture.ManufactureType
+import ru.donnu.practice.tables.manufacture.ManufactureTable
 
 class ManufactureController(private val call: RoutingCall) {
 
-    suspend fun insertManufacture(){
+    suspend fun insertManufacture() = try{
         val receiveManufacture = call.receive<ManufactureReceive>()
         val type = ManufactureType.valueOf(receiveManufacture.type)
         val result = ManufactureTable.insertManufacture(receiveManufacture.countryId, type, receiveManufacture.value)
-        return call.respond(result)
-//    } catch (e: Exception){
-//        call.respond(HttpStatusCode.BadRequest)
-//    }
+        call.respond(result)
+    } catch(e: Exception){
+        e.printStackTrace()
+        call.respond(HttpStatusCode.BadRequest)
+    }
 
-}
+    suspend fun deleteRecipe() {
+        val id = call.parameters["countryId"]?.toIntOrNull() ?: return call.respond(HttpStatusCode.BadRequest)
+        ManufactureTable.deleteWithId(id)
+        call.respond(HttpStatusCode.OK)
+    }
+
 }

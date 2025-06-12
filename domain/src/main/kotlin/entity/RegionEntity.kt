@@ -1,4 +1,4 @@
-package ru.donnu.practice.model.region
+package entity
 
 import kotlinx.serialization.Serializable
 

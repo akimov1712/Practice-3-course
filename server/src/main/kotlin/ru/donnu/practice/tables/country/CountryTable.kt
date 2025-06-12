@@ -1,13 +1,13 @@
-package ru.donnu.practice.model.country
+package ru.donnu.practice.tables.country
 
+import entity.CountryEntity
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.donnu.practice.model.region.RegionEntity
-import ru.donnu.practice.model.region.RegionTable
+import ru.donnu.practice.tables.region.RegionTable
 
 object CountryTable: IntIdTable("country") {
 
@@ -17,6 +17,10 @@ object CountryTable: IntIdTable("country") {
 
     fun selectWithId(id: Int) = transaction {
         selectAll().where{ CountryTable.id eq id }.first().toCountry()
+    }
+
+    fun selectCountryList() = transaction {
+        selectAll().map { it.toCountry() }
     }
 
     fun insertCountry(country: CountryEntity) = transaction {

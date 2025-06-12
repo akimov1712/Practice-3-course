@@ -9,5 +9,9 @@ fun Application.configureManufactureRouting(){
             val controller = ManufactureController(call)
             controller.insertManufacture()
         }
+        delete("/manufacture/{countryId}") {
+            val controller = ManufactureController(call)
+            controller.deleteRecipe()
+        }
     }
 }

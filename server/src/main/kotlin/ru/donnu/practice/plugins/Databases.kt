@@ -5,9 +5,9 @@ import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.donnu.practice.model.country.CountryTable
-import ru.donnu.practice.model.manufacture.ManufactureTable
-import ru.donnu.practice.model.region.RegionTable
+import ru.donnu.practice.tables.country.CountryTable
+import ru.donnu.practice.tables.manufacture.ManufactureTable
+import ru.donnu.practice.tables.region.RegionTable
 import ru.donnu.practice.utills.Env
 
 fun Application.configureDatabases() {

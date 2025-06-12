@@ -1,10 +1,12 @@
-package ru.donnu.practice.model.manufacture
+package ru.donnu.practice.tables.manufacture
 
+import entity.ManufactureEntity
+import entity.ManufactureType
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.donnu.practice.model.country.CountryTable
+import ru.donnu.practice.tables.country.CountryTable
 
 object ManufactureTable: IntIdTable("manufacture") {
 
@@ -35,11 +37,15 @@ object ManufactureTable: IntIdTable("manufacture") {
         selectAll().map { it.toManufacture() }
     }
 
+    fun deleteWithId(countryId: Int) = transaction {
+        deleteWhere { ManufactureTable.countryId eq countryId }
+    }
+
     private fun ResultRow.toManufacture() = ManufactureEntity(
-        id = this[ManufactureTable.id].value,
-        countryId = this[ManufactureTable.countryId].value,
-        type = ManufactureType.valueOf(this[ManufactureTable.type]),
-        value = this[ManufactureTable.value]
+        id = this[id].value,
+        countryId = this[countryId].value,
+        type = ManufactureType.valueOf(this[type]),
+        value = this[value]
     )
 
 }

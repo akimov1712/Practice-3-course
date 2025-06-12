@@ -1,7 +1,6 @@
-package ru.donnu.practice.model.country
+package entity
 
 import kotlinx.serialization.Serializable
-import ru.donnu.practice.model.region.RegionEntity
 
 @Serializable
 data class CountryEntity(
