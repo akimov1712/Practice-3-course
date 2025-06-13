@@ -14,8 +14,12 @@ kotlin {
         val desktopMain by getting
         
         commonMain.dependencies {
+
+            implementation(project(":domain"))
             implementation("io.ktor:ktor-client-core:3.1.3")
             implementation("io.ktor:ktor-client-okhttp:3.1.3")
+            implementation("io.ktor:ktor-client-content-negotiation:3.1.3")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:3.1.3")
 
             implementation(compose.runtime)
             implementation(compose.foundation)

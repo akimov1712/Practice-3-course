@@ -10,9 +10,11 @@ import ru.donnu.practice.tables.manufacture.ManufactureTable
 class ManufactureController(private val call: RoutingCall) {
 
     suspend fun insertManufacture() = try{
-        val receiveManufacture = call.receive<ManufactureReceive>()
-        val type = ManufactureType.valueOf(receiveManufacture.type)
-        val result = ManufactureTable.insertManufacture(receiveManufacture.countryId, type, receiveManufacture.value)
+        val receiveManufacture = call.receive<List<ManufactureReceive>>()
+        val result = receiveManufacture.map {
+            val type = ManufactureType.valueOf(it.type)
+            ManufactureTable.insertManufacture(it.countryId, type, it.value)
+        }
         call.respond(result)
     } catch(e: Exception){
         e.printStackTrace()
