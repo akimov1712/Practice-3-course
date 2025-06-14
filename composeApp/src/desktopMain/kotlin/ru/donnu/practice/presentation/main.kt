@@ -19,7 +19,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "Donnu Practice",
         resizable = false,
-        state = WindowState(size = WindowSize(1180.dp, 750.dp))
+        state = WindowState(size = WindowSize(1250.dp, 800.dp))
     ) {
         TabsScreen()
     }
