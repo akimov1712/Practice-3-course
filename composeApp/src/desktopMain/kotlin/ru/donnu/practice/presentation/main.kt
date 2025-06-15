@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
@@ -19,7 +20,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "Donnu Practice",
         resizable = false,
-        state = WindowState(size = WindowSize(1250.dp, 800.dp))
+        state = WindowState(size = DpSize(1250.dp, 800.dp))
     ) {
         TabsScreen()
     }

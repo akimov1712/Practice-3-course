@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 object RegionTable: IntIdTable("region") {
 
     private val name = text("name")
+    private val nameRu = text("name_ru")
 
     fun insertName(name: String) = transaction { insert { it[RegionTable.name] = name } }
 
@@ -24,6 +25,7 @@ object RegionTable: IntIdTable("region") {
     private fun ResultRow.toRegion() = RegionEntity(
         id = this[id].value,
         name = this[name],
+        nameRu = this[nameRu],
     )
 
 }
