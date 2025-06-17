@@ -2,15 +2,13 @@ package ru.donnu.practice.presentation.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
@@ -24,7 +22,7 @@ import ru.donnu.practice.presentation.ui.Colors
 @Composable
 fun AppButton(
     text: String,
-    icon: DrawableResource,
+    icon: DrawableResource? = null,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource? = null,
@@ -47,18 +45,26 @@ fun AppButton(
         colors = ButtonDefaults.buttonColors(backgroundColor, contentColor),
         contentPadding = contentPadding,
     ){
-        Icon(
-            modifier = Modifier.size(24.dp),
-            painter = painterResource(icon),
-            contentDescription = null,
-            tint = contentColor
-        )
-        Spacer(Modifier.width(14.dp))
-        AppText(
-            text = text,
-            color = contentColor,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ){
+            if (icon != null) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(icon),
+                    contentDescription = null,
+                    tint = contentColor
+                )
+                Spacer(Modifier.width(14.dp))
+            }
+            AppText(
+
+                text = text,
+                color = contentColor,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
     }
 }
