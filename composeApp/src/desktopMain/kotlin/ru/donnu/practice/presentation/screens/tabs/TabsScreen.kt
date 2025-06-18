@@ -24,6 +24,7 @@ import org.jetbrains.compose.resources.painterResource
 import practice_3_course.composeapp.generated.resources.Res
 import practice_3_course.composeapp.generated.resources.ic_logo
 import ru.donnu.practice.presentation.screens.add.AddScreen
+import ru.donnu.practice.presentation.screens.edit.EditScreen
 import ru.donnu.practice.presentation.screens.home.HomeScreen
 import ru.donnu.practice.presentation.screens.tabs.TabsEnum.*
 import ru.donnu.practice.presentation.ui.Colors
@@ -41,7 +42,7 @@ fun TabsScreen() {
             when(state.tabs[state.selectedIndex]){
                 Home -> HomeScreen{ viewModel.changeSelectedTabs(state.tabs.indexOf(TabsEnum.Add)) }
                 Add -> AddScreen()
-                Edit -> {}
+                Edit -> EditScreen()
                 Delete -> {}
             }
         }

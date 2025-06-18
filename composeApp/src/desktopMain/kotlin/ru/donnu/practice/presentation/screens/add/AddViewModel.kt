@@ -12,6 +12,8 @@ import ru.donnu.practice.network.manufacture.ManufactureDTO
 import ru.donnu.practice.repository.CountryRepository
 import ru.donnu.practice.repository.ManufactureRepository
 import ru.donnu.practice.repository.ProductionRepository
+import ru.donnu.practice.utills.filterChars
+import ru.donnu.practice.utills.isValidManufacture
 
 class AddViewModel{
 
@@ -63,9 +65,6 @@ class AddViewModel{
         }
     }
 
-    private fun String.filterChars() = this.filter { it != 'f' && it != 'd' }
-
-    private fun String.isValidManufacture() = toDoubleOrNull() != null || this.isEmpty()
 
     init {
         loadCountries()

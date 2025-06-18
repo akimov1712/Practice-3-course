@@ -51,7 +51,7 @@ fun AppButton(
         ){
             if (icon != null) {
                 Icon(
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(16.dp),
                     painter = painterResource(icon),
                     contentDescription = null,
                     tint = contentColor

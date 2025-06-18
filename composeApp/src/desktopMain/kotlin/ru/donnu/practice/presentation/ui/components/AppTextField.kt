@@ -45,6 +45,7 @@ fun AppTextField(
                 )
             }
             BasicTextField(
+                modifier = Modifier.fillMaxSize(),
                 value = value,
                 onValueChange = onValueChange,
                 enabled = enabled,
