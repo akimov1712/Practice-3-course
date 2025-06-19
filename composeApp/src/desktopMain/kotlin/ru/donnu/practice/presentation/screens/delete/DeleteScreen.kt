@@ -1,4 +1,4 @@
-package ru.donnu.practice.presentation.screens.edit
+package ru.donnu.practice.presentation.screens.delete
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -13,26 +13,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import practice_3_course.composeapp.generated.resources.Res
-import practice_3_course.composeapp.generated.resources.ic_edit
-import practice_3_course.composeapp.generated.resources.ic_save
+import practice_3_course.composeapp.generated.resources.ic_add
+import practice_3_course.composeapp.generated.resources.ic_delete
 import ru.donnu.practice.presentation.ui.Colors
-import ru.donnu.practice.presentation.ui.components.AppButton
-import ru.donnu.practice.presentation.ui.components.AppText
-import ru.donnu.practice.presentation.ui.components.EdiProductionRow
-import ru.donnu.practice.presentation.ui.components.TitleProductionRow
+import ru.donnu.practice.presentation.ui.components.*
 
 @Composable
-fun EditScreen(){
+fun DeleteScreen(){
     Column(
         modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 32.dp)
     ) {
-        val viewModel = remember { EditViewModel() }
-        val state by viewModel.state.collectAsState()
-        Header(state.editMode, viewModel::changeStatus)
+        val viewModel = remember { DeleteViewModel() }
+        Header{ viewModel.deleteProduction() }
         Spacer(Modifier.height(24.dp))
         ProductionList(viewModel)
     }
@@ -40,9 +37,10 @@ fun EditScreen(){
 
 @Composable
 private fun ColumnScope.ProductionList(
-    viewModel: EditViewModel
+    viewModel: DeleteViewModel
 ) {
     val state by viewModel.state.collectAsState()
+    val generalCondition by viewModel.generalCondition.collectAsState()
     val listState = rememberLazyListState()
     val sortedProduction by viewModel.sortedProduction.collectAsState()
     Row(
@@ -55,9 +53,11 @@ private fun ColumnScope.ProductionList(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             item {
-                TitleProductionRow(
+                TitleDeleteProductionRow(
                     productionSortedType = state.productionSortedType,
-                    sortedType = state.sortedType
+                    sortedType = state.sortedType,
+                    state = generalCondition,
+                    onClickCheckBox = { viewModel.toggleGeneralCondition() }
                 ) {
                     viewModel.changeSortedType(it)
                 }
@@ -66,11 +66,11 @@ private fun ColumnScope.ProductionList(
                 items = sortedProduction,
                 key = { it.country.name }
             ) {
-                EdiProductionRow(
-                    production = it,
-                    editMode = state.editMode
-                ){ value, type ->
-                    viewModel.changeValueField(it.country, type, value)
+                DeleteProductionRow(
+                    checkboxEnabled = state.deleteIds.contains(it.country.id),
+                    production = it
+                ){
+                    viewModel.toggleDeleteId(it.country.id)
                 }
             }
         }
@@ -87,23 +87,24 @@ private fun ColumnScope.ProductionList(
 }
 
 @Composable
-private fun Header(modeEdit: Boolean, onClickEdit: () -> Unit) {
+private fun Header(onClickDelete: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(end = 18.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         AppText(
-            text = "Редактировать таблицу",
+            text = "Удалить продукцию",
             color = Colors.BLACK.copy(0.85f),
             fontSize = 32.sp,
             fontWeight = FontWeight.SemiBold
         )
         AppButton(
-            text = if (modeEdit) "Сохранить" else "Изменить",
-            icon = if (modeEdit) Res.drawable.ic_save else Res.drawable.ic_edit
+            text = "Удалить",
+            icon = Res.drawable.ic_delete,
+            backgroundColor = Colors.RED
         ) {
-            onClickEdit()
+            onClickDelete()
         }
     }
 }

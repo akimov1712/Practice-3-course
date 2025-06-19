@@ -21,6 +21,7 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import entity.ManufactureType
 import entity.ProductionEntity
 import entity.ProductionSortedType
@@ -37,14 +38,26 @@ import ru.donnu.practice.presentation.ui.components.TitleProductionRow
 import ru.donnu.practice.utills.sortedWithType
 
 @Composable
-fun HomeScreen(onClickAdd: () -> Unit){
+fun HomeScreen(){
     Column(
         modifier = Modifier.fillMaxSize().padding(vertical = 24.dp, horizontal = 32.dp)
     ) {
         val viewModel = remember { HomeViewModel() }
-        Header(onClickAdd)
+        val state by viewModel.state.collectAsState()
+        Header{ viewModel.changeShowDialog(true) }
         Spacer(Modifier.height(24.dp))
         ProductionList(viewModel)
+        if (state.showDialog){
+            FilterDialog(
+                coerceCoal = state.coerceCoal,
+                coerceOil = state.coerceOil,
+                coerceSteel = state.coerceSteel,
+                changeCoerceOil = { viewModel.changeCoerce(ManufactureType.OIL, it) },
+                changeCoerceCoal = { viewModel.changeCoerce(ManufactureType.COAL, it) },
+                changeCoerceSteel = { viewModel.changeCoerce(ManufactureType.STEEL, it) },
+                onDismissRequest = { viewModel.changeShowDialog(false) },
+            )
+        }
     }
 }
 
@@ -92,23 +105,22 @@ private fun ColumnScope.ProductionList(
 }
 
 @Composable
-private fun Header(onClickAdd: () -> Unit) {
+private fun Header(onClickFilter: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(end = 18.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         AppText(
-            text = "Таблица продукции",
+            text = "Таблица продукции (в млн. т.)",
             color = Colors.BLACK.copy(0.85f),
             fontSize = 32.sp,
             fontWeight = FontWeight.SemiBold
         )
         AppButton(
-            text = "Добавить",
-            icon = Res.drawable.ic_add
+            text = "Фильтры",
         ) {
-            onClickAdd()
+            onClickFilter()
         }
     }
 }

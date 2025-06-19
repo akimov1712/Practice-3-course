@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.donnu.practice.repository.CountryRepository
+import ru.donnu.practice.network.manufacture.ManufactureDTO
+import ru.donnu.practice.repository.ManufactureRepository
 import ru.donnu.practice.repository.ProductionRepository
 import ru.donnu.practice.utills.filterChars
 import ru.donnu.practice.utills.isValidManufacture
@@ -23,9 +24,17 @@ class EditViewModel {
 
     private val scope = CoroutineScope(Dispatchers.IO)
     private val productionRepository = ProductionRepository()
+    private val manufactRepository = ManufactureRepository()
 
     private val _state = MutableStateFlow(EditState())
     val state = _state.asStateFlow()
+
+    private fun sendUpdates() = scope.launch {
+        val manufactures = state.value.productions.map { it.manufacturers }.flatten().map {
+            ManufactureDTO(it.countryId, it.type.name, it.value)
+        }
+        manufactRepository.addManufactures(manufactures)
+    }
 
     fun changeValueField(country: CountryEntity, type: ManufactureType, value: String){
         if (!value.isValidManufacture()) return
@@ -33,9 +42,9 @@ class EditViewModel {
             val oldProduct = it.productions.first{it.country == country}
             val oldManufacts = oldProduct.manufacturers
             val newManufacts = when(type){
-                ManufactureType.STEEL -> oldManufacts.map { it.copy(value = value.filterChars().toDouble()).takeIf { it.type == ManufactureType.STEEL} ?: it }
-                ManufactureType.COAL -> oldManufacts.map { it.copy(value = value.filterChars().toDouble()).takeIf { it.type == ManufactureType.COAL} ?: it }
-                ManufactureType.OIL -> oldManufacts.map { it.copy(value = value.filterChars().toDouble()).takeIf { it.type == ManufactureType.OIL} ?: it }
+                ManufactureType.STEEL -> oldManufacts.map { it.copy(value = value.filterChars().toDoubleOrNull() ?: 0.0).takeIf { it.type == ManufactureType.STEEL} ?: it }
+                ManufactureType.COAL -> oldManufacts.map { it.copy(value = value.filterChars().toDoubleOrNull() ?: 0.0).takeIf { it.type == ManufactureType.COAL} ?: it }
+                ManufactureType.OIL -> oldManufacts.map { it.copy(value = value.filterChars().toDoubleOrNull() ?: 0.0).takeIf { it.type == ManufactureType.OIL} ?: it }
             }
             val newProductions = it.productions.map {
                 if (it.country == country) oldProduct.copy(manufacturers = newManufacts) else it
@@ -45,7 +54,11 @@ class EditViewModel {
 
     }
 
-    fun changeEditMode() = _state.update { it.copy(editMode = !it.editMode) }
+    fun changeStatus(){
+        val newStatus = !state.value.editMode
+        if (!newStatus){ sendUpdates() }
+        _state.update { it.copy(editMode = newStatus) }
+    }
 
     val sortedProduction = state.map {
         it.productions.sortedWithType(it.productionSortedType, it.sortedType)

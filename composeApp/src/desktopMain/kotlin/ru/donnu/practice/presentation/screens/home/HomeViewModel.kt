@@ -2,6 +2,9 @@ package ru.donnu.practice.presentation.screens.home
 
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
+import entity.DoubleRange
+import entity.ManufactureType
+import entity.ManufactureType.*
 import entity.ProductionSortedType
 import entity.SortedType
 import kotlinx.coroutines.CoroutineScope
@@ -21,10 +24,28 @@ class HomeViewModel {
     val state = _state.asStateFlow()
 
     val sortedProduction = state.map {
-        it.productions.sortedWithType(it.productionSortedType, it.sortedType)
+        it.productions.sortedWithType(it.productionSortedType, it.sortedType).filter {
+            val state = state.value
+            val coalCondition = it.manufacturers.first { it.type == COAL }.value in ((state.coerceCoal.from?.toDoubleOrNull() ?: Double.MIN_VALUE)..(state.coerceCoal.to?.toDoubleOrNull() ?: Double.MAX_VALUE))
+            val oilCondition = it.manufacturers.first { it.type == OIL }.value  in ((state.coerceOil.from?.toDoubleOrNull() ?: Double.MIN_VALUE)..(state.coerceOil.to?.toDoubleOrNull() ?: Double.MAX_VALUE))
+            val steelCondition = it.manufacturers.first { it.type == STEEL }.value  in ((state.coerceSteel.from?.toDoubleOrNull() ?: Double.MIN_VALUE)..(state.coerceSteel.to?.toDoubleOrNull() ?: Double.MAX_VALUE))
+            listOf(coalCondition, oilCondition, steelCondition).all { it }
+        }
     }.stateIn(
         scope, SharingStarted.Lazily, state.value.productions
     )
+
+    fun changeShowDialog(value: Boolean) = _state.update { it.copy(showDialog = value) }
+
+    fun changeCoerce(type: ManufactureType, coerce: DoubleRange){
+        _state.update {
+            when(type){
+                STEEL -> it.copy(coerceSteel = coerce)
+                COAL -> it.copy(coerceCoal = coerce)
+                OIL -> it.copy(coerceOil = coerce)
+            }
+        }
+    }
 
     fun changeSortedType(type: ProductionSortedType){
         if (type == _state.value.productionSortedType){

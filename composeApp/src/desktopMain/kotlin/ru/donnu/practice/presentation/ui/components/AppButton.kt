@@ -59,7 +59,6 @@ fun AppButton(
                 Spacer(Modifier.width(14.dp))
             }
             AppText(
-
                 text = text,
                 color = contentColor,
                 fontSize = 18.sp,
